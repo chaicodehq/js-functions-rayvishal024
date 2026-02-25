@@ -45,13 +45,81 @@
  *   pricer("gold", true)  // => 200 * 1.5 * 1.3 = 390
  */
 export function createDialogueWriter(genre) {
-  // Your code here
+
+  if (genre === "action")
+    return (hero, villain) => (!hero || !villain) ? "..." :`${hero} says: 'Tujhe toh main dekh lunga, ${villain}!'`
+  else if (genre === "romance")
+    return (hero, villain) => (!hero || !villain) ? "..." : `${hero} whispers: '${villain}, tum mere liye sab kuch ho'`
+  else if (genre === "comedy")
+    return (hero, villain) => (!hero || !villain) ? "..." : `${ hero } laughs: '${villain} bhai, kya kar rahe ho yaar!'`
+  else if (genre === "drama")
+    return (hero, villain) => (!hero || !villain) ? "..." : `${hero} cries: '${villain}, tune mera sab kuch cheen liya!'`;
+  else
+    return null;
+
 }
 
 export function createTicketPricer(basePrice) {
-  // Your code here
+  
+  // validate baseprice
+  if (typeof basePrice !== "number" || basePrice <= 0)
+    return null;
+
+  return (seatType, isWeekend = false) => {
+    let price = basePrice;
+
+    // check the seat type
+    if (seatType === "silver") 
+      price *= 1;
+    else if (seatType === "gold")
+      price *= 1.5
+    else if (seatType === "platinum")
+      price *= 2;
+    else
+      return null;
+
+    if (isWeekend) 
+      price *= 1.3;
+    
+    return Math.round(price);
+  }
+
+
 }
 
 export function createRatingCalculator(weights) {
-  // Your code here
+
+//   - Factory: returns a function (scores) => weighted average
+//     * - weights: { story: 0.3, acting: 0.3, direction: 0.2, music: 0.2 }
+//  * - scores: { story: 8, acting: 9, direction: 7, music: 8 }
+//  * - Weighted avg = sum of(score * weight) for matching keys
+//     * - Round to 1 decimal place
+  //       * - Agar weights not an object => return null
+  
+  // validate weights
+  if (typeof weights !== "object" || weights === null)
+    return null;
+
+  return (scores) => {
+
+    if (typeof scores !== "object" || scores === null) {
+      return null;
+    }
+
+    let total = 0;
+
+    for (let key in weights) {
+      const weight = weights[key];
+      const score = scores[key];
+
+      if (typeof score !== "number") {
+        return null; 
+      }
+
+      total += score * weight;
+    }
+
+    return Number(total.toFixed(1));
+  };
+
 }

@@ -38,21 +38,55 @@
  *   // => { name: "Jadeja", strikeRate: 175, economy: 7.5, battingAvg: 28.57, isAllRounder: false }
  */
 export const calcStrikeRate = (runs, balls) => {
-  // Your code here
+ 
+  if (balls <= 0 || runs < 0)
+    return 0;
+
+  let strikeRate = +((runs / balls) * 100).toFixed(2);
+
+  return strikeRate;
 };
 
 export const calcEconomy = (runsConceded, overs) => {
-  // Your code here
+ 
+  if (overs <= 0 || runsConceded < 0)
+    return 0;
+
+  return +(runsConceded / overs).toFixed(2);
 };
 
 export const calcBattingAvg = (totalRuns, innings, notOuts = 0) => {
-  // Your code here
+ 
+  if (innings - notOuts <= 0)
+    return 0;
+
+  return +(totalRuns / (innings - notOuts)).toFixed(2);
+
 };
 
 export const isAllRounder = (battingAvg, economy) => {
-  // Your code here
+
+  return (battingAvg > 30 && economy < 8);
 };
 
 export const getPlayerCard = (player) => {
-  // Your code here
+//   - player object: { name, runs, balls, totalRuns, innings, notOuts, runsConceded, overs }
+//  * - Return: { name, strikeRate, economy, battingAvg, isAllRounder }
+//  * - Use the above functions internally
+//     * - Agar player null / undefined hai ya name missing, return null
+  //       *
+  
+  if (player === null || typeof player !== "object" || !player.hasOwnProperty("name"))
+    return null;
+
+  let name = player.name;
+  let strikeRate = calcStrikeRate(player.runs, player.balls);
+  let economy = calcEconomy(player.runsConceded, player.overs);
+  let battingAvg = calcBattingAvg(player.totalRuns, player.innings, player.notOuts);
+  let isAllRounder1 = isAllRounder(battingAvg, economy);
+
+  return {
+    name, strikeRate, economy, battingAvg, isAllRounder : isAllRounder1
+  }
+
 };

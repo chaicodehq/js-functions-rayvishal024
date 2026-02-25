@@ -32,5 +32,39 @@
  *   // => { type: "plain", quantity: 1, pricePerDosa: 40, total: 40 }
  */
 export function calculateDosaOrder(type, quantity = 1, isSpicy = false) {
-  // Your code here
+  // validate the parameter
+  if (typeof type !== "string" || typeof quantity !== "number" || !Number.isInteger(quantity) || quantity <= 0)
+    return null;
+
+  let basePrice = 0;
+  if (type === "plain")
+    basePrice = 40;
+  else if (type === "masala")
+    basePrice = 60;
+  else if (type === "onion")
+    basePrice = 50;
+  else if (type === "butter")
+    basePrice = 70;
+  else if (type === "paper")
+    basePrice = 90;
+  else if (type === "cheese")
+    basePrice = 80;
+  else
+    return null;
+
+  // increase price if he want spicy
+  let pricePerDosa = basePrice;
+  if (isSpicy)
+    pricePerDosa += 10;
+
+  let total = pricePerDosa * quantity;
+
+  return {
+    type,
+    quantity,
+    pricePerDosa,
+    total
+  };
+
+  
 }

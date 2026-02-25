@@ -40,13 +40,82 @@
  *   // => { totalCustomers: 3, totalRevenue: 7200, mealBreakdown: { veg: 2, nonveg: 1 } }
  */
 export function createTiffinPlan({ name, mealType = "veg", days = 30 } = {}) {
-  // Your code here
+
+  // valiate parameter 
+  if (mealType !== "veg" && mealType !== "nonveg" && mealType !== "jain")
+    return null;
+
+  if (name === "" || name === undefined)
+    return null;
+
+  let dailyRate = 0;
+  if (mealType === "veg")
+    dailyRate = 80;
+  else if (mealType === "nonveg")
+    dailyRate = 120;
+  else if (mealType === "jain")
+    dailyRate = 90;
+
+  let totalCost = dailyRate * days;
+
+  return { name, mealType, days, dailyRate, totalCost }
+
 }
 
 export function combinePlans(...plans) {
-  // Your code here
+
+  if (plans.length === 0)
+    return null;
+
+  let totalCustomers = plans.length;
+  let totalRevenue = plans.reduce((total, plan) => total + plan.totalCost, 0);
+  let mealBreakdown = {
+    veg: 0,
+    nonveg: 0,
+    jain: 0
+  };
+
+  plans.forEach((plans) => {
+    mealBreakdown[plans.mealType] += 1;
+  });
+
+  return {
+    totalCustomers, totalRevenue, mealBreakdown 
+  }
 }
 
 export function applyAddons(plan, ...addons) {
-  // Your code here
+
+//   - plan: { name, mealType, days, dailyRate, totalCost }
+//  * - Each addon: { name: "raita", price: 15 }
+//  * - Add each addon price to dailyRate
+//     * - Recalculate totalCost = new dailyRate * days
+//       * - Return NEW plan object(don't modify original)
+//         * - addonNames: array of addon names added
+  //       * - Agar plan null hai, return null
+
+  // validate the plan
+  if (typeof plan !== "object" || plan === null)
+    return null;
+
+  // Calculate total addon price
+  const totalAddonPrice = addons.reduce((sum, addon) => {
+    return sum + (addon?.price || 0);
+  }, 0);
+
+    // new daily rate
+  const newDailyRate = plan.dailyRate + totalAddonPrice;
+
+  const newTotalCost = newDailyRate * plan.days;
+
+  const addonNames = addons.map(addon => addon.name);
+
+  return {
+    ...plan,
+    dailyRate: newDailyRate,
+    totalCost: newTotalCost,
+    addonNames
+  };
+
+
 }
