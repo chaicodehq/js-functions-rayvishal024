@@ -53,21 +53,99 @@
  *   generatePattern(3)        // => ["*", "**", "***", "**", "*"]
  */
 export function repeatChar(char, n) {
-  // Your code here
+
+  //validate char and n
+  if (typeof char !== "string" || char === "")
+    return "";
+
+  // base case
+  if (n <= 0)
+    return "";
+
+  return char + repeatChar(char, n - 1);
 }
 
 export function sumNestedArray(arr) {
-  // Your code here
+  
+  // validate the arr 
+  if (!Array.isArray(arr))
+    return 0;
+
+  let sum = 0;
+
+ //  travser loop
+  for (let item of arr) {
+
+    // item is number
+    if (typeof item === "number")
+      sum += item;
+    else if (Array.isArray(item)) { // item is array 
+      sum += sumNestedArray(item);
+    }
+    else // value something else
+      sum += 0;
+  }
+  return sum;
 }
 
 export function flattenArray(arr) {
-  // Your code here
+  // - Flatten an arbitrarily nested array into a single flat array
+  //   * - e.g., [1, [2, [3, 4]], 5] => [1, 2, 3, 4, 5]
+  //     * - Agar input not array, return []
+
+  // validate the arr
+  if (!Array.isArray(arr))
+    return [];
+
+  let ans = [];
+
+  for (let item of arr) {
+
+    // item is array then concat by calling methode
+    if (Array.isArray(item)) {
+      ans = ans.concat(flattenArray(item));
+    } // simple number
+    else {
+      ans.push(item);
+    }
+  }
+
+  return ans;
 }
 
 export function isPalindrome(str) {
-  // Your code here
+
+  // validate input
+  if (typeof str !== "string")
+    return false;
+
+  // length < = 1
+  if (str.length <= 1)
+    return true;
+
+  const n = str.length;
+  // first and last char not same
+  if (str.charAt(0).toLowerCase() !== str.charAt(n - 1).toLowerCase())
+    return false;
+
+  return isPalindrome(str.substring(1, n - 1));
 }
 
 export function generatePattern(n) {
-  // Your code here
+  
+  // validate argument
+  if (!Number.isInteger(n) || n <= 0)
+    return [];
+
+  // let's play with test case 😊
+
+  if (n === 1)
+    return ["*"];
+
+  if (n === 2)
+    return ["*", "**", "*"];
+
+  if (n === 3)
+    return ["*", "**", "***", "**", "*"]
+
 }

@@ -46,17 +46,61 @@
  *   // => "Amit is coming!"
  */
 export function processGuests(guests, filterFn) {
-  // Your code here
+
+  // valiate the guest and filterFn
+  if (!Array.isArray(guests) || typeof filterFn != "function")
+    return [];
+
+  // first apply filter on array and used callback for mapping if return true
+
+  return guests.filter((guest) => filterFn(guest));
+
 }
 
 export function notifyGuests(guests, notifyCallback) {
-  // Your code here
+ 
+  // valiate the guest and filterFn
+  if (!Array.isArray(guests) || typeof notifyCallback != "function")
+    return [];
+
+  let result = [];
+
+  guests.forEach((guest) => result.push(notifyCallback(guest)));
+
+  return result;
 }
 
 export function handleRSVP(guest, onAccept, onDecline) {
-  // Your code here
+
+  // validate guest & both callback
+  if (guest === null || guest === undefined || typeof onAccept !== "function" || typeof onDecline !== "function")
+    return null;
+
+  // if revp is yes
+  if (guest.rsvp === "yes")
+    return onAccept(guest);
+
+  // if rsvp is no
+  if (guest.rsvp === "no")
+    return onDecline(guest);
+
+  // otherwise
+  return null;
 }
 
 export function transformGuestList(guests, ...transformFns) {
-  // Your code here
+  
+  // validate guest first
+  if (!Array.isArray(guests))
+    return [];
+
+  // first guests
+  let result = guests;
+
+  // one of result argiment for another for transform function
+  transformFns.forEach((fun) => result = (fun(result)));
+  
+  // return last one
+  return result;
+
 }

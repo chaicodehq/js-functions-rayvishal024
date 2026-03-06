@@ -45,17 +45,77 @@
  *   // => [{ rating: 5 }, { rating: 3 }]
  */
 export function createFilter(field, operator, value) {
-  // Your code here
+
+  return (obj) => {
+    if (operator === ">")
+      return obj[field] > value;
+    if (operator === "<")
+      return obj[field] < value;
+    if (operator === "<=")
+      return obj[field] <= value;
+    if (operator === ">=")
+      return obj[field] >= value;
+    if (operator === "===")
+      return obj[field] === value;
+    return false;
+  }
+
+  
+
 }
 
 export function createSorter(field, order = "asc") {
-  // Your code here
+
+  return (a, b) => {
+
+    let valA = a[field];
+    let valB = b[field];
+
+    let result;
+
+    // for number
+    if (typeof valA === "number" && typeof valB === "number") {
+      result = valA - valB;
+    }  // for string
+    else {
+      result = String(valA).localeCompare(String(valB));
+    }
+
+    // return accordingly either asc or desc 
+    return order === "asc" ? result : -result;
+  };
+
 }
 
 export function createMapper(fields) {
-  // Your code here
+  //       - fields: array of field names, e.g., ["name", "rating"]
+//  * - Returns a function that takes an object and returns a new object
+//     *        with ONLY the specified fields
+//     * - e.g., createMapper(["name"])({ name: "Dhaba", rating: 4 }) => { name: "Dhaba" }
+  //       * 
+  
+  return (obj) => {
+    let ans = {};
+
+    for (let field of fields) {
+      if (field in obj) {
+        ans[field] = obj[field];
+      }
+    }
+
+    return ans;
+  }
+
 }
 
 export function applyOperations(data, ...operations) {
-  // Your code here
+  
+  if (!Array.isArray(data))
+    return [];
+
+  for (let operation of operations) {
+    data = operation(data);
+  }
+
+  return data;
 }

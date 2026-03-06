@@ -54,21 +54,83 @@
  *   // red and blue objects are UNCHANGED
  */
 export function mixColors(color1, color2) {
-  // Your code here
+  
+  // validate both color
+  if (typeof color1 !== "object" || color1 === null || typeof color2 !== "object" || color2 === null)
+    return null;
+
+  return {
+    name: `${color1.name}-${color2.name}`,
+    r: Math.round((color1.r + color2.r) / 2),
+    g: Math.round((color1.g + color2.g) / 2),
+    b: Math.round((color1.b + color2.b) / 2),
+  }
 }
 
 export function adjustBrightness(color, factor) {
-  // Your code here
+
+  // validate argument
+  if (typeof color !== "object" || color === null || typeof factor !== "number")
+    return null;
+
+  return {
+    name: color.name,
+    r: Math.round(color.r * factor) <= 255 ? Math.round(color.r * factor) : 255,
+    g: Math.round(color.g * factor) <= 255 ? Math.round(color.g * factor) : 255,
+    b: Math.round(color.b * factor) <= 255 ? Math.round(color.b * factor) : 255,
+  }
+
 }
 
 export function addToPalette(palette, color) {
-  // Your code here
+    
+  // validate color 
+  if (color === null)
+    return [...palette];
+
+  // validate palette
+  if (!Array.isArray(palette))
+    return [color];
+
+  return [...palette, color]
+
 }
 
 export function removeFromPalette(palette, colorName) {
-  // Your code here
+  //  - Return NEW array without the color with that name
+//  * - MUST NOT modify original palette
+  //     * - Agar palette not array, return []
+  
+  // validate parameter --
+  if (!Array.isArray(palette)) return [];
+
+  if (typeof colorName !== "string") return [...palette];
+
+  return palette.filter((e) => e.name !== colorName);
 }
 
 export function mergePalettes(palette1, palette2) {
-  // Your code here
+  // - Merge two palettes into NEW array
+  //   * - No duplicate names(keep first occurrence)
+  //     * - MUST NOT modify either original palette
+  //       * - Agar either not array, treat as empty array
+
+  if (!Array.isArray(palette1))
+    palette1 = [];
+
+  if (!Array.isArray(palette2))
+    palette2 = [];
+
+  const mergedarr = [...palette1, ...palette2];
+  const seen = {};
+  const result = [];
+
+  for (let color of mergedarr) {
+    if (!seen[color.name]) {
+      seen[color.name] = true;
+      result.push(color);
+    }
+  }
+
+  return result;
 }
